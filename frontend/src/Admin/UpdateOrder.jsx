@@ -59,8 +59,15 @@ function UpdateOrder() {
     <div className="order-details">
         <h2>Order Information</h2>
         <p><strong>Order ID: </strong>{orderId}</p>
-        <p><strong>Shipping Address:</strong>{shippingInfo.address},{shippingInfo.city},{shippingInfo.state},{shippingInfo.country}-{shippingInfo.pinCode}</p>
+        <p><strong>Shipping Address:</strong> {shippingInfo.address}</p>
         <p><strong>Phone: </strong>{shippingInfo.phoneNo}</p>
+        <p><strong>Location: </strong>
+             {shippingInfo.latitude && shippingInfo.longitude ? (
+                 <a href={`https://www.google.com/maps/search/?api=1&query=${shippingInfo.latitude},${shippingInfo.longitude}`} target="_blank" rel="noreferrer" style={{color: 'blue'}}>
+                    View on Map ({shippingInfo.latitude.toFixed(4)}, {shippingInfo.longitude.toFixed(4)})
+                 </a>
+              ) : "N/A"}
+        </p>
         <p><strong>Order Status: </strong>{finalOrderStatus}</p>
         <p><strong>Payment Status: </strong>{paymentStatus}</p>
         <p><strong>Total Price: </strong>{totalPrice}/-</p>

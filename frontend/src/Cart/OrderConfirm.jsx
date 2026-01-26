@@ -46,7 +46,7 @@ function OrderConfirm() {
                     <tr>
                         <td>{user.name}</td>
                         <td>{shippingInfo.phoneNumber}</td>
-                        <td>{shippingInfo.address},{shippingInfo.city},{shippingInfo.state},{shippingInfo.country}-{shippingInfo.pinCode}</td>
+                        <td>{shippingInfo.address}</td>
                     </tr>
                 </tbody>
             </table>

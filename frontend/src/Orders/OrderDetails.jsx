@@ -75,12 +75,22 @@ const paymentStatusClass=`pay-tag ${paymentStatus==='Paid'?'paid':'not-paid'}`
               <tr className="table-row">
                 <th className="table-cell">Address</th>
                 <td className="table-cell">
-                  {shippingInfo.address},{shippingInfo.city},{shippingInfo.state},{shippingInfo.country}-{shippingInfo.pinCode}
+                  {shippingInfo.address}
                 </td>
               </tr>
               <tr className="table-row">
                 <th className="table-cell">Phone</th>
                 <td className="table-cell">{shippingInfo.phoneNo}</td>
+              </tr>
+              <tr className="table-row">
+                <th className="table-cell">Location</th>
+                <td className="table-cell">
+                  {shippingInfo.latitude && shippingInfo.longitude ? (
+                     <a href={`https://www.google.com/maps/search/?api=1&query=${shippingInfo.latitude},${shippingInfo.longitude}`} target="_blank" rel="noreferrer" style={{color: 'blue'}}>
+                        View on Map
+                     </a>
+                  ) : "N/A"}
+                </td>
               </tr>
             </tbody>
           </table>
