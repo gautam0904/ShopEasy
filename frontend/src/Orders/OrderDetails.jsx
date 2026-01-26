@@ -54,7 +54,7 @@ const paymentStatusClass=`pay-tag ${paymentStatus==='Paid'?'paid':'not-paid'}`
             </thead>
             <tbody>
              { orderItems.map((item)=>(
-                <tr className="table-row">
+                <tr className="table-row" key={item.product}>
                 <td className="table-cell">
                   <img src={item.image} alt={item.name} className="item-img" />
                 </td>
