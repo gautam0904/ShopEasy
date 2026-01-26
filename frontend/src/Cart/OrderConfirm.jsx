@@ -15,6 +15,13 @@ function OrderConfirm() {
     const shippingCharges=subtotal>500?0:50
     const total=subtotal+tax+shippingCharges;
     const navigate=useNavigate()
+    
+    React.useEffect(() => {
+        if (cartItems.length === 0) {
+            navigate('/cart');
+        }
+    }, [cartItems, navigate]);
+
     const proceedToPayment=()=>{
         const data={
             subtotal,
@@ -23,7 +30,7 @@ function OrderConfirm() {
             total
         }
         sessionStorage.setItem('orderItem',JSON.stringify(data));
-        navigate('/process/payment')
+        navigate('/paymentSuccess?reference=COD')
     }
   return (
     <>
@@ -97,7 +104,7 @@ function OrderConfirm() {
                 </tbody>
             </table>
         </div>
-        <button className="proceed-button" onClick={proceedToPayment}>Proceed to Payment</button>
+        <button className="proceed-button" onClick={proceedToPayment}>Place Order (Cash on Delivery)</button>
     </div>
     <Footer/>
     </>
