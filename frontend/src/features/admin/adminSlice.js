@@ -158,6 +158,56 @@ export const deleteReview=createAsyncThunk('admin/deleteReview',async({productId
     }
 })
 
+// Block User
+export const blockUser=createAsyncThunk('admin/blockUser',async({userId,reason},{rejectWithValue})=>{
+    try{
+        const {data}=await axios.put(`/api/v1/admin/user/${userId}/block`,{reason})
+        return data;
+    }catch(error){
+        return rejectWithValue(error.response?.data ||"Failed to Block User")
+    }
+})
+
+// Unblock User
+export const unblockUser=createAsyncThunk('admin/unblockUser',async(userId,{rejectWithValue})=>{
+    try{
+        const {data}=await axios.put(`/api/v1/admin/user/${userId}/unblock`)
+        return data;
+    }catch(error){
+        return rejectWithValue(error.response?.data ||"Failed to Unblock User")
+    }
+})
+
+// Confirm Delivery (Admin marks order as delivered after delivery boy requests)
+export const confirmDelivery=createAsyncThunk('admin/confirmDelivery',async(orderId,{rejectWithValue})=>{
+    try{
+        const {data}=await axios.put(`/api/v1/admin/order/${orderId}/confirm-delivery`)
+        return data;
+    }catch(error){
+        return rejectWithValue(error.response?.data ||"Failed to Confirm Delivery")
+    }
+})
+
+// Fetch orders pending completion
+export const fetchPendingCompletionOrders=createAsyncThunk('admin/fetchPendingCompletionOrders',async(_,{rejectWithValue})=>{
+    try{
+        const {data}=await axios.get(`/api/v1/admin/orders/pending-completion`)
+        return data;
+    }catch(error){
+        return rejectWithValue(error.response?.data ||"Failed to Fetch Pending Completion Orders")
+    }
+})
+
+// Assign Order to Delivery Boy
+export const assignOrderToDeliveryBoy=createAsyncThunk('admin/assignOrderToDeliveryBoy',async({orderId,deliveryBoyId},{rejectWithValue})=>{
+    try{
+        const {data}=await axios.put(`/api/v1/admin/order/${orderId}/assign`,{deliveryBoyId})
+        return data;
+    }catch(error){
+        return rejectWithValue(error.response?.data ||"Failed to Assign Order")
+    }
+})
+
 
 const adminSlice=createSlice({
     name:'admin',
@@ -174,7 +224,8 @@ const adminSlice=createSlice({
         orders:[],
         totalAmount:0,
         order:{},
-        reviews:[]
+        reviews:[],
+        pendingCompletionOrders:[]
     },
     reducers:{
         removeErrors:(state)=>{
@@ -380,7 +431,6 @@ const adminSlice=createSlice({
         })
 
         
-        builder
         .addCase(deleteReview.pending,(state)=>{
             state.loading=true;
             state.error=null
@@ -395,6 +445,87 @@ const adminSlice=createSlice({
         .addCase(deleteReview.rejected,(state,action)=>{
               state.loading=false,
             state.error=action.payload?.message ||'Failed to Delete Product Review'
+        })
+
+        // Block User
+        builder
+        .addCase(blockUser.pending,(state)=>{
+            state.loading=true;
+            state.error=null
+        })
+        .addCase(blockUser.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.success=true
+            state.message=action.payload.message
+        })
+        .addCase(blockUser.rejected,(state,action)=>{
+            state.loading=false,
+            state.error=action.payload?.message ||'Failed to Block User'
+        })
+
+        // Unblock User
+        builder
+        .addCase(unblockUser.pending,(state)=>{
+            state.loading=true;
+            state.error=null
+        })
+        .addCase(unblockUser.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.success=true
+            state.message=action.payload.message
+        })
+        .addCase(unblockUser.rejected,(state,action)=>{
+            state.loading=false,
+            state.error=action.payload?.message ||'Failed to Unblock User'
+        })
+
+        // Confirm Delivery
+        builder
+        .addCase(confirmDelivery.pending,(state)=>{
+            state.loading=true;
+            state.error=null
+        })
+        .addCase(confirmDelivery.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.success=true
+            state.message=action.payload.message
+            state.order=action.payload.order
+        })
+        .addCase(confirmDelivery.rejected,(state,action)=>{
+            state.loading=false,
+            state.error=action.payload?.message ||'Failed to Confirm Delivery'
+        })
+
+        // Fetch Pending Completion Orders
+        builder
+        .addCase(fetchPendingCompletionOrders.pending,(state)=>{
+            state.loading=true;
+            state.error=null
+        })
+        .addCase(fetchPendingCompletionOrders.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.pendingCompletionOrders=action.payload.orders
+        })
+        .addCase(fetchPendingCompletionOrders.rejected,(state,action)=>{
+            state.loading=false,
+            state.error=action.payload?.message ||'Failed to Fetch Pending Completion Orders'
+        })
+
+        // Assign Order to Delivery Boy
+        builder
+        .addCase(assignOrderToDeliveryBoy.pending,(state)=>{
+            state.loading=true;
+            state.error=null
+        })
+        .addCase(assignOrderToDeliveryBoy.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.success=true
+            state.message=action.payload.message
+            state.order=action.payload.order
+        })
+        .addCase(assignOrderToDeliveryBoy.rejected,(state,action)=>{
+            state.loading=false,
+            state.error=action.payload?.message ||'Failed to Assign Order'
         })
     }
 })

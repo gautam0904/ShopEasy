@@ -23,6 +23,11 @@ function UserDashboard({ user }) {
             name: 'Admin Dashboard', funcName: dashboard
         })
     }
+    if (user.role === 'deliveryboy') {
+        options.unshift({
+            name: 'Delivery Dashboard', funcName: deliveryDashboard
+        })
+    }
     function orders() {
         navigate("/orders/user")
     }
@@ -48,6 +53,9 @@ function UserDashboard({ user }) {
     function dashboard() {
         navigate("/admin/dashboard")
 
+    }
+    function deliveryDashboard() {
+        navigate("/delivery/dashboard")
     }
     return (
         <>
