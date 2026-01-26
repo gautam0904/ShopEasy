@@ -30,8 +30,12 @@ function UpdateOrder() {
         orderStatus,
         totalPrice
     }=order
-    const paymentStatus=paymentInfo.status==='succeeded'?'Paid':'Not Paid';
-    const finalOrderStatus=paymentStatus==='Not Paid'?'Cancelled':orderStatus;
+    // For COD orders, payment will be collected on delivery
+    const paymentMethod = paymentInfo?.method || 'COD';
+    const paymentStatus = paymentInfo?.status === 'succeeded' ? 'Paid' : (paymentMethod === 'COD' ? 'Cash on Delivery' : 'Not Paid');
+    // Don't mark COD orders as cancelled - show actual order status
+    const finalOrderStatus = orderStatus || 'Processing';
+    
     const handleStatusUpdate=()=>{
         if(!status){
             toast.error('Please select a status',{position:'top-center',autoClose:3000})

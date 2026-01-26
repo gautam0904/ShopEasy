@@ -15,6 +15,13 @@ function OrderConfirm() {
     const shippingCharges=subtotal>500?0:50
     const total=subtotal+tax+shippingCharges;
     const navigate=useNavigate()
+    
+    React.useEffect(() => {
+        if (cartItems.length === 0) {
+            navigate('/cart');
+        }
+    }, [cartItems, navigate]);
+
     const proceedToPayment=()=>{
         const data={
             subtotal,

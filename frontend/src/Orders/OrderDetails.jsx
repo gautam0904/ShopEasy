@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails, removeErrors } from "../features/order/orderSlice";
 import Loader from "../components/Loader";
+import { toast } from 'react-toastify';
 
 function OrderDetails() {
   const { orderId } = useParams();
@@ -20,6 +21,7 @@ function OrderDetails() {
       dispatch(removeErrors());
     }
   }, [dispatch, error, orderId]);
+  
 const {
     shippingInfo={},
     orderItems=[],
@@ -31,10 +33,15 @@ const {
     itemPrice,
     paidAt
 }=order;
-const paymentStatus=paymentInfo?.status==='succeeded'?'Paid':'Not Paid'
-const finalOrderStatus=paymentStatus==='Not Paid'?'Cancelled':orderStatus;
-const orderStatusClass=finalOrderStatus==='Delivered'?'status-tag delivered':`status-tag ${finalOrderStatus.toLowerCase()}`;
-const paymentStatusClass=`pay-tag ${paymentStatus==='Paid'?'paid':'not-paid'}`
+
+// For COD orders, payment will be collected on delivery, so treat them as valid orders
+const paymentMethod = paymentInfo?.method || 'COD';
+const paymentStatus = paymentInfo?.status === 'succeeded' ? 'Paid' : (paymentMethod === 'COD' ? 'Cash on Delivery' : 'Not Paid');
+// Don't mark COD orders as cancelled - only show actual order status
+const finalOrderStatus = orderStatus || 'Processing';
+const orderStatusClass = finalOrderStatus === 'Delivered' ? 'status-tag delivered' : `status-tag ${finalOrderStatus?.toLowerCase().replace(/\s/g, '-')}`;
+const paymentStatusClass = `pay-tag ${paymentStatus === 'Paid' ? 'paid' : (paymentStatus === 'Cash on Delivery' ? 'cod' : 'not-paid')}`;
+
   return (
     <>
       <PageTitle title={orderId} />
