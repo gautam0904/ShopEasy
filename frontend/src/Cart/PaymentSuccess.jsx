@@ -25,11 +25,9 @@ function PaymentSuccess() {
           const orderData={
             shippingInfo:{
               address:shippingInfo.address,
-              city:shippingInfo.city,
-              state:shippingInfo.state,
-              country:shippingInfo.country,
-              pinCode:shippingInfo.pinCode,
-              phoneNo:shippingInfo.phoneNumber
+              phoneNo:shippingInfo.phoneNumber,
+              latitude:shippingInfo.latitude,
+              longitude:shippingInfo.longitude
             },
             orderItems:cartItems.map((item)=>({
               name:item.name,
