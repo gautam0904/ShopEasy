@@ -8,6 +8,13 @@ import handleAsyncError from '../middleware/handleAsyncError.js';
 export const createNewOrder=handleAsyncError(async(req,res,next)=>{
 const {shippingInfo,orderItems,paymentInfo,itemPrice,taxPrice,shippingPrice,totalPrice}=req.body;
 
+  // Check for max quantity per item
+  for (const item of orderItems) {
+    if (item.quantity > 6) {
+      return next(new HandleError("You can strictly order a maximum of 6 units for any single item", 400));
+    }
+  }
+
 const order=await Order.create({
     shippingInfo,
     orderItems,
