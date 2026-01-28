@@ -6,7 +6,10 @@ import handleAsyncError from '../middleware/handleAsyncError.js';
 // Get all available (unassigned) orders for delivery boys to accept
 export const getAvailableOrders = handleAsyncError(async (req, res, next) => {
     const orders = await Order.find({ 
-        assignedTo: null, 
+        $or: [
+            { assignedTo: null },
+            { assignedTo: { $exists: false } }
+        ],
         orderStatus: { $nin: ['Delivered', 'Cancelled'] }
     }).populate("user", "name email");
     
