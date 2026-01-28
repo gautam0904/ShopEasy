@@ -8,9 +8,18 @@ import errorHandleMiddleware  from './middleware/error.js';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
 import dotenv from 'dotenv'
+import cors from 'cors';
+
 const app=express();
 
+dotenv.config({path:'backend/config/config.env'})
+
 // Middleware
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}))
 app.use(express.json())
 app.use(cookieParser())
 app.use(fileUpload())
@@ -24,5 +33,5 @@ app.use("/api/v1",payment)
 app.use("/api/v1",delivery)
 
 app.use(errorHandleMiddleware)
-dotenv.config({path:'backend/config/config.env'})
+
 export default app;
