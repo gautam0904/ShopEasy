@@ -17,7 +17,7 @@ import ResetPassword from './User/ResetPassword';
 import Cart from './Cart/Cart';
 import Shipping from './Cart/Shipping';
 import OrderConfirm from './Cart/OrderConfirm';
-import Payment from './Cart/Payment';
+
 import PaymentSuccess from './Cart/PaymentSuccess';
 import MyOrders from './Orders/MyOrders';
 import OrderDetails from './Orders/OrderDetails';
@@ -30,6 +30,8 @@ import UpdateRole from './Admin/UpdateRole';
 import OrdersList from './Admin/OrdersList';
 import UpdateOrder from './Admin/UpdateOrder';
 import ReviewsList from './Admin/ReviewsList';
+import DeliveryDashboard from './Delivery/DeliveryDashboard';
+import DeliveryOrderDetails from './Delivery/DeliveryOrderDetails';
 
 function App() {
   const {isAuthenticated,user}=useSelector(state=>state.user);
@@ -57,7 +59,7 @@ function App() {
       <Route path="/cart" element={<Cart/>}/>
       <Route path="/shipping" element={<ProtectedRoute element={<Shipping/>}/>}/>
       <Route path="/order/confirm" element={<ProtectedRoute element={<OrderConfirm/>}/>}/>
-      <Route path="/process/payment" element={<ProtectedRoute element={<Payment/>}/>}/>
+
       <Route path="/paymentSuccess" element={<ProtectedRoute element={<PaymentSuccess/>}/>}/>
       <Route path="/orders/user" element={<ProtectedRoute element={<MyOrders/>}/>}/>
       <Route path="/order/:orderId" element={<ProtectedRoute element={<OrderDetails/>}/>}/>
@@ -71,6 +73,9 @@ function App() {
       <Route path="/admin/orders" element={<ProtectedRoute element={<OrdersList/>} adminOnly={true}/>}/>
       <Route path="/admin/order/:orderId" element={<ProtectedRoute element={<UpdateOrder/>} adminOnly={true}/>}/>
       <Route path="/admin/reviews" element={<ProtectedRoute element={<ReviewsList/>} adminOnly={true}/>}/>
+      {/* Delivery Boy Routes */}
+      <Route path="/delivery/dashboard" element={<ProtectedRoute element={<DeliveryDashboard/>} deliveryOnly={true}/>}/>
+      <Route path="/delivery/order/:orderId" element={<ProtectedRoute element={<DeliveryOrderDetails/>} deliveryOnly={true}/>}/>
     </Routes>
     {isAuthenticated && <UserDashboard user={user}/>}
    </Router>
@@ -78,3 +83,4 @@ function App() {
 }
 
 export default App
+

@@ -25,11 +25,9 @@ function PaymentSuccess() {
           const orderData={
             shippingInfo:{
               address:shippingInfo.address,
-              city:shippingInfo.city,
-              state:shippingInfo.state,
-              country:shippingInfo.country,
-              pinCode:shippingInfo.pinCode,
-              phoneNo:shippingInfo.phoneNumber
+              phoneNo:shippingInfo.phoneNumber,
+              latitude:shippingInfo.latitude,
+              longitude:shippingInfo.longitude
             },
             orderItems:cartItems.map((item)=>({
               name:item.name,
@@ -40,7 +38,7 @@ function PaymentSuccess() {
             })),
             paymentInfo:{
               id:reference,
-              status:'succeeded'
+              status: reference === 'COD' ? 'Processing' : 'succeeded'
             },
             itemPrice:orderItem.subtotal,
             taxPrice:orderItem.tax,
@@ -79,8 +77,8 @@ function PaymentSuccess() {
     <div className="success-icon">
         <div className="checkmark"></div>
     </div>
-    <h1>Order Confirmed!</h1>
-    <p>Your payment was successful. Reference ID <strong>{reference}</strong></p>
+    <h1>{reference === 'COD' ? 'Order Placed Successfully!' : 'Order Confirmed!'}</h1>
+    <p>{reference === 'COD' ? 'Your order has been placed using Cash on Delivery.' : <span>Your payment was successful. Reference ID <strong>{reference}</strong></span>}</p>
     <Link className='explore-btn' to="/orders/user">View Orders</Link>
     </div>
   </div>

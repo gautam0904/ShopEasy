@@ -77,6 +77,7 @@ function UpdateRole() {
               <select name="role" id="role" required value={role} onChange={handleChange}>
                 <option value="">Select Role</option>
                 <option value="user">User</option>
+                <option value="deliveryboy">Delivery Boy</option>
                 <option value="admin">Admin</option>
               </select>
             </div>

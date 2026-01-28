@@ -6,23 +6,15 @@ const orderSchema=new mongoose.Schema({
             type:String,
             required:true
         },
-        city:{
-            type:String,
-            required:true
-        },
-        state:{
-            type:String,
-            required:true
-        },
-        country:{
-            type:String,
-            required:true
-        },
-        pinCode:{
+        phoneNo:{
             type:Number,
             required:true
         },
-        phoneNo:{
+        latitude:{
+            type:Number,
+            required:true
+        },
+        longitude:{
             type:Number,
             required:true
         }
@@ -100,7 +92,22 @@ const orderSchema=new mongoose.Schema({
     createdAt:{
        type:Date,
        default:Date.now 
-    }
+    },
+    assignedTo: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User"
+    },
+    assignedAt: Date,
+    deliveryNotes: [{
+        note: String,
+        addedBy: { type: mongoose.Schema.ObjectId, ref: "User" },
+        addedAt: { type: Date, default: Date.now }
+    }],
+    completionRequested: {
+        type: Boolean,
+        default: false
+    },
+    completionRequestedAt: Date
 })
 
 export default mongoose.model('Order',orderSchema)
