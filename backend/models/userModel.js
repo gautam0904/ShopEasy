@@ -24,8 +24,19 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: "user"
+        default: "user",
+        enum: ["user", "admin", "deliveryboy"]
     },
+    isBlocked: {
+        type: Boolean,
+        default: false
+    },
+    blockedAt: Date,
+    blockedReason: String,
+    unblockHistory: [{
+        unblockedAt: Date,
+        unblockedBy: { type: mongoose.Schema.ObjectId, ref: "User" }
+    }],
     resetPasswordToken: String,
     resetPasswordExpire: Date
 }, { timestamps: true })

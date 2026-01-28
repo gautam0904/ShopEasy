@@ -25,6 +25,10 @@ export const loginUser = handleAsyncError(async (req, res, next) => {
     if (!user) {
         return next(new HandleError("Invalid Email or password", 401))
     }
+    // Check if user is blocked
+    if (user.isBlocked) {
+        return next(new HandleError("Your account has been blocked. Please contact support.", 403))
+    }
     const isPasswordValid = await user.verifyPassword(password);
     if (!isPasswordValid) {
         return next(new HandleError("Invalid Email or password", 401))
@@ -202,5 +206,60 @@ export const deleteUser = handleAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: "User Deleted Successfully"
+    })
+})
+
+// Admin - Block User
+export const blockUser = handleAsyncError(async (req, res, next) => {
+    const { reason } = req.body;
+    const user = await User.findById(req.params.id);
+    
+    if (!user) {
+        return next(new HandleError("User doesn't exist", 400))
+    }
+    
+    if (user.role === 'admin') {
+        return next(new HandleError("Cannot block an admin user", 400))
+    }
+    
+    if (user.isBlocked) {
+        return next(new HandleError("User is already blocked", 400))
+    }
+    
+    user.isBlocked = true;
+    user.blockedAt = Date.now();
+    user.blockedReason = reason || "No reason provided";
+    await user.save({ validateBeforeSave: false });
+    
+    res.status(200).json({
+        success: true,
+        message: "User blocked successfully"
+    })
+})
+
+// Admin - Unblock User
+export const unblockUser = handleAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+    
+    if (!user) {
+        return next(new HandleError("User doesn't exist", 400))
+    }
+    
+    if (!user.isBlocked) {
+        return next(new HandleError("User is not blocked", 400))
+    }
+    
+    user.isBlocked = false;
+    user.unblockHistory.push({
+        unblockedAt: Date.now(),
+        unblockedBy: req.user._id
+    });
+    user.blockedAt = undefined;
+    user.blockedReason = undefined;
+    await user.save({ validateBeforeSave: false });
+    
+    res.status(200).json({
+        success: true,
+        message: "User unblocked successfully"
     })
 })

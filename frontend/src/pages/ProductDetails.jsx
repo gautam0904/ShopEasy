@@ -61,6 +61,11 @@ function ProductDetails() {
         setQuantity(qty=>qty-1)
        }
        const increaseQuantity=()=>{
+        if(quantity>=6){
+            toast.error('Quantity limit exceeded (Max 6)',{position:'top-center',autoClose:3000})
+            dispatch(removeErrors())
+            return;
+        }    
         if(product.stock<=quantity){
             toast.error('Cannot exceed available Stock!',{position:'top-center',autoClose:3000})
             dispatch(removeErrors())

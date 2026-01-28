@@ -92,7 +92,22 @@ const orderSchema=new mongoose.Schema({
     createdAt:{
        type:Date,
        default:Date.now 
-    }
+    },
+    assignedTo: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User"
+    },
+    assignedAt: Date,
+    deliveryNotes: [{
+        note: String,
+        addedBy: { type: mongoose.Schema.ObjectId, ref: "User" },
+        addedAt: { type: Date, default: Date.now }
+    }],
+    completionRequested: {
+        type: Boolean,
+        default: false
+    },
+    completionRequestedAt: Date
 })
 
 export default mongoose.model('Order',orderSchema)

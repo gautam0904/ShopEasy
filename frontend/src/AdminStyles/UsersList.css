@@ -69,6 +69,71 @@
     background-color: rgba(220, 53, 69, 0.1);
     color:#f3253a;
   }
+
+  .block-icon {
+    color: #ff9800;
+    border: none;
+    background: none;
+  }
+
+  .block-icon:hover {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: #e68900;
+  }
+
+  .unblock-icon {
+    color: #4caf50;
+    border: none;
+    background: none;
+  }
+
+  .unblock-icon:hover {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #388e3c;
+  }
+
+  .status-blocked {
+    background-color: #f44336;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: help;
+  }
+
+  .status-active {
+    background-color: #4caf50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  .role-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    text-transform: capitalize;
+  }
+
+  .role-user {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+
+  .role-admin {
+    background-color: #fce4ec;
+    color: #c2185b;
+  }
+
+  .role-deliveryboy {
+    background-color: #fff3e0;
+    color: #e65100;
+  }
+
+  .blocked-user {
+    background-color: #ffebee !important;
+  }
   
   .loading-message {
     font-size: 18px;
