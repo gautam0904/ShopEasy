@@ -25,7 +25,7 @@ function UpdateProduct() {
       const dispatch=useDispatch();
       const navigate=useNavigate();
       const {updateId}=useParams();
-      const categories = ["mobile", "fruits", "laptop","shirt","shoes","pants","glass","watch","cookies","Pomegranate","socks","bag","mouse","headphone","bucket","bangle","ring","lcd","jacket","tops"];
+      const categories = ["Vegetable", "Fruit", "Grocery", "Cooking Oil", "Masala", "Ready-to-Eat Food"];
 
       useEffect(()=>{
         dispatch(getProductDetails(updateId))

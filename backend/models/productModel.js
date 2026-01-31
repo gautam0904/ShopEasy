@@ -34,6 +34,7 @@ const productSchema=new mongoose.Schema({
     category:{
         type:String,
         required:[true,"Please Enter Product Category"],
+        enum: ["Vegetable", "Fruit", "Grocery", "Cooking Oil", "Masala", "Ready-to-Eat Food"]
     },
     stock:{
         type:Number,

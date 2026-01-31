@@ -7,7 +7,9 @@ import CheckoutPath from "./CheckoutPath";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from 'react-toastify';
 import { saveShippingInfo } from "../features/cart/cartSlice";
+import { saveAddress, deleteAddress } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { Delete } from '@mui/icons-material';
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { MyLocation } from '@mui/icons-material'
 
@@ -15,6 +17,7 @@ const libraries = ["places"];
 
 function Shipping() {
   const { shippingInfo } = useSelector(state => state.cart);
+  const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,25 +25,49 @@ function Shipping() {
   const [phoneNumber, setPhoneNumber] = useState(shippingInfo.phoneNumber || "");
   const [lat, setLat] = useState(shippingInfo.latitude || 23.0225); 
   const [lng, setLng] = useState(shippingInfo.longitude || 72.5714);
+  const [saveInfo, setSaveInfo] = useState(false);
 console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
     libraries,
   });
 
-  const shippingInfoSubmit = (e) => {
+  const shippingInfoSubmit = async (e) => {
     e.preventDefault();
-    if (phoneNumber.length < 10) {
-      toast.error('Invalid Phone number! It should be at least 10 digits', { position: 'top-center', autoClose: 3000 });
+    
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      toast.error('Invalid Phone Number! Please enter a valid 10-digit mobile number.', { position: 'top-center', autoClose: 3000 });
       return;
     }
+
     if (!address) {
        toast.error('Address is required', { position: 'top-center', autoClose: 3000 });
        return;
     }
+
+    if (saveInfo) {
+       await dispatch(saveAddress({ address, phoneNo: phoneNumber, latitude: lat, longitude: lng }));
+       toast.success("Address saved to profile!");
+    }
+
     dispatch(saveShippingInfo({ address, phoneNumber, latitude: lat, longitude: lng }));
     navigate('/order/confirm');
   };
+
+  const selectAddress = (addr) => {
+      setAddress(addr.address);
+      setPhoneNumber(addr.phoneNo);
+      setLat(addr.latitude);
+      setLng(addr.longitude);
+      toast.info("Address Selected");
+  }
+
+  const handleDeleteAddress = (id) => {
+      if(window.confirm("Are you sure you want to delete this address?")) {
+          dispatch(deleteAddress(id));
+      }
+  }
 
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -74,6 +101,24 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
       <CheckoutPath activePath={0} />
       <div className="shipping-form-container">
         <h1 className="shipping-form-header">Shipping Details</h1>
+        
+        {user && user.addresses && user.addresses.length > 0 && (
+            <div className="saved-addresses-section">
+                <h3>Saved Addresses</h3>
+                <div className="saved-addresses-list">
+                    {user.addresses.map((addr) => (
+                        <div key={addr._id} className="saved-address-card" onClick={() => selectAddress(addr)}>
+                            <p className="saved-addr-text">{addr.address}</p>
+                            <p className="saved-addr-phone">Phone: {addr.phoneNo}</p>
+                            <button className="delete-addr-btn" onClick={(e) => { e.stopPropagation(); handleDeleteAddress(addr._id); }}>
+                                <Delete fontSize="small" />
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )}
+
         <form className="shipping-form" onSubmit={shippingInfoSubmit}>
             
             <div className="shipping-form-group full-width">
@@ -93,12 +138,18 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
             <div className="shipping-form-group full-width">
               <label htmlFor="phoneNumber">Mobile Number</label>
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
                 id="phoneNumber"
                 name="phoneNumber"
-                placeholder="Enter your mobile number"
+                placeholder="Enter 10-digit mobile number"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*$/.test(val) && val.length <= 10) {
+                        setPhoneNumber(val);
+                    }
+                }}
                 required
               />
             </div>
@@ -122,6 +173,17 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
                     <Marker position={{ lat, lng }} />
                 </GoogleMap>
             </div>
+          </div>
+
+          <div className="shipping-form-group">
+              <label className="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    checked={saveInfo} 
+                    onChange={(e) => setSaveInfo(e.target.checked)} 
+                  />
+                  Save this address for future orders
+              </label>
           </div>
 
           <button className="shipping-submit-btn">Continue</button>
