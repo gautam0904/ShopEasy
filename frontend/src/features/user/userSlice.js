@@ -105,6 +105,29 @@ export const resetPassword = createAsyncThunk('user/resetPassword', async ({ tok
     }
 })
 
+export const saveAddress = createAsyncThunk('user/saveAddress', async (addressData, { rejectWithValue }) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        const { data } = await axios.post('/api/v1/me/address/new', addressData, config);
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data || { message: 'Failed to save address' })
+    }
+})
+
+export const deleteAddress = createAsyncThunk('user/deleteAddress', async (id, { rejectWithValue }) => {
+    try {
+        const { data } = await axios.delete(`/api/v1/me/address/${id}`);
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data || { message: 'Failed to delete address' })
+    }
+})
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
@@ -295,6 +318,38 @@ const userSlice = createSlice({
                 state.loading = false,
                     state.error = action.payload?.message || 'Email sent failed'
 
+            })
+            
+        // Save Address
+        builder
+            .addCase(saveAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(saveAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload.success;
+                state.user = action.payload.user; // Update user with new address list
+            })
+            .addCase(saveAddress.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload?.message || 'Failed to save address';
+            })
+
+        // Delete Address
+        builder
+            .addCase(deleteAddress.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deleteAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload.success;
+                state.user = action.payload.user; // Update user with new address list
+            })
+            .addCase(deleteAddress.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload?.message || 'Failed to delete address';
             })
     }
 })
