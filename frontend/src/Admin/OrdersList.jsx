@@ -64,10 +64,13 @@ function OrdersList() {
                 </thead>
                 <tbody>
                   {orders && orders.map((order,index)=>(
+                    console.log(order.orderStatus),
                     <tr key={order._id}>
                         <td>{index+1}</td>
                         <td>{order._id}</td>
-                        <td className={`order-status ${order.orderStatus.toLowerCase()}`}>{order.orderStatus}</td>
+                        <td className={`order-status ${(order.orderStatus || 'unknown').toLowerCase().replace(/\s+/g, '-')}`}>
+                          {order.orderStatus || 'Unknown'}
+                        </td>
                         <td>{order.totalPrice.toFixed(2)}/-</td>
                         <td>{order.orderItems.length}</td>
                         <td>

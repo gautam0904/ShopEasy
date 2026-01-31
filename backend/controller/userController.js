@@ -40,7 +40,9 @@ export const loginUser = handleAsyncError(async (req, res, next) => {
 export const logout = handleAsyncError(async (req, res, next) => {
     res.cookie('token', null, {
         expires: new Date(Date.now()),
-        httpOnly: true
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
     })
     res.status(200).json({
         success: true,
@@ -262,4 +264,52 @@ export const unblockUser = handleAsyncError(async (req, res, next) => {
         success: true,
         message: "User unblocked successfully"
     })
+})
+
+// Save new Address
+export const saveAddress = handleAsyncError(async (req, res, next) => {
+    const { address, phoneNo, latitude, longitude } = req.body;
+    
+    if (!address || !phoneNo || !latitude || !longitude) {
+        return next(new HandleError("Please provide all address details", 400));
+    }
+
+    const user = await User.findById(req.user.id);
+    
+    user.addresses.push({
+        address,
+        phoneNo,
+        latitude,
+        longitude
+    });
+
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true,
+        message: "Address saved successfully",
+        user
+    });
+});
+
+// Delete Address
+export const deleteAddress = handleAsyncError(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+    
+    const addressId = req.params.id;
+    const addressIndex = user.addresses.findIndex(addr => addr._id.toString() === addressId);
+
+    if (addressIndex === -1) {
+        return next(new HandleError("Address not found", 404));
+    }
+
+    user.addresses.splice(addressIndex, 1);
+    
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true,
+        message: "Address deleted successfully",
+        user
+    });
 })

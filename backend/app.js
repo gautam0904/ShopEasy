@@ -8,9 +8,19 @@ import errorHandleMiddleware  from './middleware/error.js';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
 import dotenv from 'dotenv'
+import cors from 'cors';
+
 const app=express();
 
+dotenv.config({path:'backend/config/config.env'})
+
 // Middleware
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:3000', 'https://shop-easy-three-gamma.vercel.app'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json())
 app.use(cookieParser())
 app.use(fileUpload())
@@ -24,5 +34,5 @@ app.use("/api/v1",payment)
 app.use("/api/v1",delivery)
 
 app.use(errorHandleMiddleware)
-dotenv.config({path:'backend/config/config.env'})
+
 export default app;

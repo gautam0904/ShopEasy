@@ -4,7 +4,9 @@ export const sendToken=(user,statusCode,res)=>{
     // options for cookies
     const options={
         expires:new Date(Date.now()+process.env.EXPIRE_COOKIE*24*60*60*1000),
-        httpOnly:true
+        httpOnly:true,
+        sameSite: 'None',
+        secure: true,
     }
     res.status(statusCode)
     .cookie('token',token,options)
