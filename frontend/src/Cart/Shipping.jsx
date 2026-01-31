@@ -34,10 +34,13 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
 
   const shippingInfoSubmit = async (e) => {
     e.preventDefault();
-    if (phoneNumber.length < 10) {
-      toast.error('Invalid Phone number! It should be at least 10 digits', { position: 'top-center', autoClose: 3000 });
+    
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      toast.error('Invalid Phone Number! Please enter a valid 10-digit mobile number.', { position: 'top-center', autoClose: 3000 });
       return;
     }
+
     if (!address) {
        toast.error('Address is required', { position: 'top-center', autoClose: 3000 });
        return;
@@ -135,12 +138,18 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
             <div className="shipping-form-group full-width">
               <label htmlFor="phoneNumber">Mobile Number</label>
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
                 id="phoneNumber"
                 name="phoneNumber"
-                placeholder="Enter your mobile number"
+                placeholder="Enter 10-digit mobile number"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*$/.test(val) && val.length <= 10) {
+                        setPhoneNumber(val);
+                    }
+                }}
                 required
               />
             </div>
