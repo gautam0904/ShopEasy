@@ -1,0 +1,137 @@
+.contact-container {
+    padding: 40px 20px;
+    max-width: 1100px;
+    margin: 80px auto 40px;
+    min-height: 60vh;
+}
+
+.contact-container h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+.contact-wrapper {
+    display: flex;
+    gap: 40px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.contact-info {
+    flex: 1;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px;
+}
+
+.contact-info h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.contact-info p {
+    margin-bottom: 30px;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.info-icon {
+    font-size: 24px !important;
+    background: rgba(255,255,255,0.2);
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px !important;
+    height: 40px !important;
+    box-sizing: content-box;
+}
+
+.info-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.info-item p {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+.contact-form {
+    flex: 1.5;
+    padding: 40px;
+}
+
+.contact-form h2 {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #667eea;
+    outline: none;
+}
+
+.btn-send {
+    background: #667eea;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+    font-weight: 500;
+}
+
+.btn-send:hover {
+    background: #5a6fd6;
+}
+
+@media (max-width: 768px) {
+    .contact-container {
+        padding: 20px;
+        margin-top: 60px;
+    }
+    
+    .contact-wrapper {
+        flex-direction: column;
+    }
+    
+    .contact-info, .contact-form {
+        padding: 25px;
+    }
+}

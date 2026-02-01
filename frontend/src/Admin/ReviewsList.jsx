@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Sidebar from './Sidebar';
 import "../AdminStyles/ReviewsList.css";
 import Navbar from "../components/Navbar";
 import PageTitle from "../components/PageTitle";
@@ -57,6 +58,9 @@ function ReviewsList() {
  {loading?(<Loader/>):(   <>
       <Navbar />
       <PageTitle title="All Reviews" />
+        <div className="admin-dashboard">
+        <Sidebar />
+        <div className="admin-content">
       <div className="reviews-list-container">
         <h1 className="reviews-list-title">All Products</h1>
         <table className="reviews-table">
@@ -114,6 +118,8 @@ function ReviewsList() {
             </table>
         </div>)}
       </div>
+    </div>
+    </div>
       <Footer />
     </>)}
     </>

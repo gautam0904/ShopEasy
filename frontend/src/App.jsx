@@ -32,6 +32,7 @@ import UpdateRole from './Admin/UpdateRole';
 import OrdersList from './Admin/OrdersList';
 import UpdateOrder from './Admin/UpdateOrder';
 import ReviewsList from './Admin/ReviewsList';
+import ContactList from './Admin/ContactList';
 import DeliveryDashboard from './Delivery/DeliveryDashboard';
 import DeliveryOrderDetails from './Delivery/DeliveryOrderDetails';
 
@@ -75,6 +76,7 @@ function App() {
       <Route path="/admin/orders" element={<ProtectedRoute element={<OrdersList/>} adminOnly={true}/>}/>
       <Route path="/admin/order/:orderId" element={<ProtectedRoute element={<UpdateOrder/>} adminOnly={true}/>}/>
       <Route path="/admin/reviews" element={<ProtectedRoute element={<ReviewsList/>} adminOnly={true}/>}/>
+      <Route path="/admin/contacts" element={<ProtectedRoute element={<ContactList/>} adminOnly={true}/>}/>
       {/* Delivery Boy Routes */}
       <Route path="/delivery/dashboard" element={<ProtectedRoute element={<DeliveryDashboard/>} deliveryOnly={true}/>}/>
       <Route path="/delivery/order/:orderId" element={<ProtectedRoute element={<DeliveryOrderDetails/>} deliveryOnly={true}/>}/>
