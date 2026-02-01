@@ -26,7 +26,6 @@ function Shipping() {
   const [lat, setLat] = useState(shippingInfo.latitude || 23.0225); 
   const [lng, setLng] = useState(shippingInfo.longitude || 72.5714);
 
-console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
     libraries,
@@ -66,20 +65,31 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
       }
   }
 
-  const handleCurrentLocation = () => {
+  const handleCurrentLocation = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
+          toast.success("Location detected!");
         },
-        (error) => {
+        async (error) => {
             console.error(error);
-            let errorMessage = "Unable to retrieve your location";
-            if (error.code === 1) errorMessage = "Location permission denied.";
-            if (error.code === 2) errorMessage = "Location unavailable. Try moving to a better area.";
-            if (error.code === 3) errorMessage = "Location request timed out.";
-            toast.error(errorMessage);
+            toast.info("Using approximate location...");
+            try {
+              const response = await fetch('https://ipapi.co/json/');
+              const data = await response.json();
+              if (data.latitude && data.longitude) {
+                setLat(data.latitude);
+                setLng(data.longitude);
+                toast.success("Approximate location set. Please adjust the pin if needed.");
+              } else {
+                toast.error("Could not determine location. Please pin manually on the map.");
+              }
+            } catch (fallbackError) {
+              console.error(fallbackError);
+              toast.error("Location detection failed. Please pin manually on the map.");
+            }
         },
         {
             enableHighAccuracy: true,

@@ -64,7 +64,6 @@ function OrdersList() {
                 </thead>
                 <tbody>
                   {orders && orders.map((order,index)=>(
-                    console.log(order.orderStatus),
                     <tr key={order._id}>
                         <td>{index+1}</td>
                         <td>{order._id}</td>
