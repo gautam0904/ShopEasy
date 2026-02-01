@@ -14,6 +14,7 @@ import {
     Star,
     YouTube
 } from '@mui/icons-material'
+import Sidebar from './Sidebar';
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle';
 import { Link } from 'react-router-dom';
@@ -37,52 +38,7 @@ function Dashboard() {
    <Navbar/>
    <PageTitle title="Admin Dashboard"/>
     <div className="dashboard-container">
-        <div className="sidebar">
-            <div className="logo">
-                <DashboardIcon  className="logo-icon"/>
-                Admin Dashboard
-            </div>
-            <nav className="nav-menu">
-                <div className="nav-section">
-                    <h3>Products</h3>
-                    <Link to="/admin/products">
-                    <Inventory className='nav-icon'/>
-                    All Products
-                    </Link>
-                    <Link to="/admin/product/create">
-                    <AddBox className='nav-icon'/>
-                    Create Product
-                    </Link>
-                </div>
-
-                <div className="nav-section">
-                    <h3>Users</h3>
-                    <Link to="/admin/users">
-                    <People className='nav-icon'/>
-                    All Users
-                    </Link>
-                
-                </div>
-
-                <div className="nav-section">
-                    <h3>Orders</h3>
-                    <Link to="/admin/orders">
-                    <ShoppingCart className='nav-icon'/>
-                    All Orders
-                    </Link>
-                
-                </div>
-
-                <div className="nav-section">
-                    <h3>Reviews</h3>
-                    <Link to="/admin/reviews">
-                    <Star className='nav-icon'/>
-                    All Reviews
-                    </Link>
-                
-                </div>
-            </nav>
-        </div>
+        <Sidebar />
 
         <div className="main-content">
           <div className="stats-grid">
