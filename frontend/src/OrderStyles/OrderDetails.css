@@ -96,17 +96,33 @@
 }
 
 
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 @media (max-width: 768px) {
+  .order-box {
+    margin: 6rem auto 2rem;
+    padding: 1rem;
+    width: 95%;
+  }
+
   .table-title {
     font-size: 1.2rem;
   }
 
   .table-main {
     font-size: 0.9rem;
+    min-width: 500px; /* Force scroll for small screens */
   }
 
   .item-img {
     width: 50px;
     height: 50px;
+  }
+  
+  .head-cell, .table-cell {
+    padding: 0.5rem;
   }
 }

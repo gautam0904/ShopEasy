@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Sidebar from './Sidebar';
 import '../AdminStyles/OrdersList.css'
 import Navbar from '../components/Navbar'
 import PageTitle from '../components/PageTitle'
@@ -48,10 +49,13 @@ function OrdersList() {
  {loading?(<Loader/>):(   <>
     <Navbar/>
     <PageTitle title="All Orders"/>
-    <div className="ordersList-container">
-        <h1 className="ordersList-title">All Orders</h1>
-        <div className="ordersList-table-container">
-            <table className="ordersList-table">
+    <div className="admin-dashboard">
+    <Sidebar />
+    <div className="admin-content">
+        <div className="ordersList-container">
+            <h1 className="ordersList-title">All Orders</h1>
+            <div className="ordersList-table-container">
+                <table className="ordersList-table">
                 <thead>
                     <tr>
                         <th>Sl No</th>
@@ -81,6 +85,8 @@ function OrdersList() {
                 </tbody>
             </table>
         </div>
+    </div>
+    </div>
     </div>
     <Footer/>
     </>)}

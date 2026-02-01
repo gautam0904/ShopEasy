@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import '../AdminStyles/ProductsList.css'
+import Sidebar from './Sidebar';
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle';
 import Footer from '../components/Footer';
@@ -48,9 +49,12 @@ function ProductsList() {
   {loading?(<Loader/>):( <>
    <Navbar/>
    <PageTitle title="All Products"/>
-    <div className="product-list-container">
-        <h1 className="product-list-title">All Products</h1>
-        <table className="product-table">
+    <div className="admin-dashboard">
+        <Sidebar />
+        <div className="admin-content">
+            <div className="product-list-container">
+                <h1 className="product-list-title">All Products</h1>
+                <table className="product-table">
             <thead>
                 <tr>
                     <th>Sl No</th>
@@ -84,6 +88,8 @@ function ProductsList() {
              ))}
             </tbody>
         </table>
+    </div>
+    </div>
     </div>
    <Footer/>
    </>)}
