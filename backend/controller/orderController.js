@@ -15,6 +15,8 @@ const {shippingInfo,orderItems,paymentInfo,itemPrice,taxPrice,shippingPrice,tota
     }
   }
 
+  await Promise.all(orderItems.map(item=>updateQuantity(item.product,item.quantity)))
+
 const order=await Order.create({
     shippingInfo,
     orderItems,
@@ -79,8 +81,9 @@ export const updateOrderStatus=handleAsyncError(async(req,res,next)=>{
     if(order.orderStatus==='Delivered'){
         return next(new HandleError("This order is already been delivered",404));
     }
-    await Promise.all(order.orderItems.map(item=>updateQuantity(item.product,item.quantity)
-    ))
+    
+    // Stock is already updated at order creation, so we don't update it here anymore
+    
     order.orderStatus=req.body.status;
     if(order.orderStatus==='Delivered'){
         order.deliveredAt=Date.now();
@@ -130,8 +133,7 @@ export const confirmDelivery=handleAsyncError(async(req,res,next)=>{
         return next(new HandleError("Delivery boy has not requested completion for this order",400));
     }
     
-    // Update stock for each item
-    await Promise.all(order.orderItems.map(item=>updateQuantity(item.product,item.quantity)))
+    // Stock is already updated at creation
     
     order.orderStatus='Delivered';
     order.deliveredAt=Date.now();

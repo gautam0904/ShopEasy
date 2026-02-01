@@ -25,8 +25,7 @@ function Shipping() {
   const [phoneNumber, setPhoneNumber] = useState(shippingInfo.phoneNumber || "");
   const [lat, setLat] = useState(shippingInfo.latitude || 23.0225); 
   const [lng, setLng] = useState(shippingInfo.longitude || 72.5714);
-  const [saveInfo, setSaveInfo] = useState(false);
-console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
     libraries,
@@ -46,11 +45,8 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
        return;
     }
 
-    if (saveInfo) {
-       await dispatch(saveAddress({ address, phoneNo: phoneNumber, latitude: lat, longitude: lng }));
-       toast.success("Address saved to profile!");
-    }
-
+    await dispatch(saveAddress({ address, phoneNo: phoneNumber, latitude: lat, longitude: lng }));
+    
     dispatch(saveShippingInfo({ address, phoneNumber, latitude: lat, longitude: lng }));
     navigate('/order/confirm');
   };
@@ -69,20 +65,31 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
       }
   }
 
-  const handleCurrentLocation = () => {
+  const handleCurrentLocation = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
+          toast.success("Location detected!");
         },
-        (error) => {
+        async (error) => {
             console.error(error);
-            let errorMessage = "Unable to retrieve your location";
-            if (error.code === 1) errorMessage = "Location permission denied.";
-            if (error.code === 2) errorMessage = "Location unavailable. Try moving to a better area.";
-            if (error.code === 3) errorMessage = "Location request timed out.";
-            toast.error(errorMessage);
+            toast.info("Using approximate location...");
+            try {
+              const response = await fetch('https://ipapi.co/json/');
+              const data = await response.json();
+              if (data.latitude && data.longitude) {
+                setLat(data.latitude);
+                setLng(data.longitude);
+                toast.success("Approximate location set. Please adjust the pin if needed.");
+              } else {
+                toast.error("Could not determine location. Please pin manually on the map.");
+              }
+            } catch (fallbackError) {
+              console.error(fallbackError);
+              toast.error("Location detection failed. Please pin manually on the map.");
+            }
         },
         {
             enableHighAccuracy: true,
@@ -185,16 +192,7 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
             </div>
           </div>
 
-          <div className="shipping-form-group">
-              <label className="checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    checked={saveInfo} 
-                    onChange={(e) => setSaveInfo(e.target.checked)} 
-                  />
-                  Save this address for future orders
-              </label>
-          </div>
+
 
           <button className="shipping-submit-btn">Continue</button>
         </form>
