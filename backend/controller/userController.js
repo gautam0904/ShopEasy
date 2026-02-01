@@ -82,7 +82,8 @@ export const requestPasswordReset = handleAsyncError(async (req, res, next) => {
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
         await user.save({ validateBeforeSave: false })
-        return next(new HandleError("Email couldn't be sent , please try again later", 500))
+        console.error("Email sending error:", error);
+        return next(new HandleError(`Email couldn't be sent: ${error}`, 500))
     }
 
 })
