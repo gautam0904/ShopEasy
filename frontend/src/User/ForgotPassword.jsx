@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../UserStyles/Form.css'
 import PageTitle from '../components/PageTitle';
 import Navbar from '../components/Navbar';
@@ -11,6 +12,7 @@ import Loader from '../components/Loader';
 function ForgotPassword() {
     const {loading,error,success,message}=useSelector(state=>state.user);
     const dispatch=useDispatch();
+    const navigate = useNavigate();
     const [email,setEmail]=useState("");
     const forgotPasswordEmail=(e)=>{
         e.preventDefault();
@@ -30,8 +32,9 @@ function ForgotPassword() {
                 if(success){
                   toast.success(message,{position:'top-center',autoClose:3000});
                   dispatch(removeSuccess());
+                  navigate('/login');
                 }
-              },[dispatch,success])
+              },[dispatch,success,navigate,message])
   return (
     <>
 {loading?(<Loader/>):(    <>
