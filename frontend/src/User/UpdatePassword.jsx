@@ -22,9 +22,6 @@ function UpdatePassword() {
         myForm.set("oldPassword",oldPassword)
         myForm.set("newPassword",newPassword)
         myForm.set("confirmPassword",confirmPassword);
-        for(let pair of myForm.entries()){
-            console.log(pair[0]+'-'+pair[1]);
-           }
         dispatch(updatePassword(myForm))
     }
           useEffect(()=>{
