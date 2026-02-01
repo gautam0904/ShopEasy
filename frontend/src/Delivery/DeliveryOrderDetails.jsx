@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import '../DeliveryStyles/DeliveryDashboard.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -81,6 +82,14 @@ function DeliveryOrderDetails() {
 
     const allowedStatuses = ['Prepared', 'Shipped', 'Out for Delivery'];
     const canUpdateStatus = orderStatus !== 'Delivered' && !completionRequested;
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
+        libraries: ["places"],
+    });
+
+    if (loadError) return <div className="error-message">Error loading maps: {loadError.message}</div>;
+    if (!isLoaded) return <Loader />;
+
     const canRequestCompletion = orderStatus !== 'Delivered' && !completionRequested && orderStatus === 'Out for Delivery';
 
     return (
@@ -119,14 +128,25 @@ function DeliveryOrderDetails() {
                             <p><strong>Address:</strong> {shippingInfo.address}</p>
                             <p><strong>Phone:</strong> {shippingInfo.phoneNo}</p>
                             {shippingInfo.latitude && shippingInfo.longitude && (
-                                <a
-                                    href={`https://www.google.com/maps/search/?api=1&query=${shippingInfo.latitude},${shippingInfo.longitude}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="btn-map-large"
-                                >
-                                    📍 Open in Google Maps
-                                </a>
+                                <div className="delivery-map-container" style={{ marginTop: '15px' }}>
+                                    <h3 style={{ fontSize: '1.1rem', marginBottom: '10px' }}>Exact Location Pin</h3>
+                                    <GoogleMap
+                                        zoom={16}
+                                        center={{ lat: shippingInfo.latitude, lng: shippingInfo.longitude }}
+                                        mapContainerStyle={{ width: '100%', height: '300px', borderRadius: '8px' }}
+                                    >
+                                        <Marker position={{ lat: shippingInfo.latitude, lng: shippingInfo.longitude }} />
+                                    </GoogleMap>
+                                    <a
+                                        href={`https://www.google.com/maps/dir/?api=1&destination=${shippingInfo.latitude},${shippingInfo.longitude}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="btn-map-large"
+                                        style={{ marginTop: '10px', display: 'block', textAlign: 'center' }}
+                                    >
+                                        📍 Start Navigation
+                                    </a>
+                                </div>
                             )}
                         </div>
                     </div>

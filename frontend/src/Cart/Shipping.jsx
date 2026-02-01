@@ -76,8 +76,18 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
           setLat(position.coords.latitude);
           setLng(position.coords.longitude);
         },
-        () => {
-          toast.error("Unable to retrieve your location");
+        (error) => {
+            console.error(error);
+            let errorMessage = "Unable to retrieve your location";
+            if (error.code === 1) errorMessage = "Location permission denied.";
+            if (error.code === 2) errorMessage = "Location unavailable. Try moving to a better area.";
+            if (error.code === 3) errorMessage = "Location request timed out.";
+            toast.error(errorMessage);
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
         }
       );
     } else {
