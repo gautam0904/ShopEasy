@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 import ProductDetails from './pages/ProductDetails';
 import Products from './pages/Products';
@@ -76,6 +78,8 @@ function App() {
       {/* Delivery Boy Routes */}
       <Route path="/delivery/dashboard" element={<ProtectedRoute element={<DeliveryDashboard/>} deliveryOnly={true}/>}/>
       <Route path="/delivery/order/:orderId" element={<ProtectedRoute element={<DeliveryOrderDetails/>} deliveryOnly={true}/>}/>
+      <Route path="/about-us" element={<About/>}/>
+      <Route path="/contact-us" element={<Contact/>}/>
     </Routes>
     {isAuthenticated && <UserDashboard user={user}/>}
    </Router>
