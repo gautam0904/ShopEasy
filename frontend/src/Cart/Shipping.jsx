@@ -25,7 +25,7 @@ function Shipping() {
   const [phoneNumber, setPhoneNumber] = useState(shippingInfo.phoneNumber || "");
   const [lat, setLat] = useState(shippingInfo.latitude || 23.0225); 
   const [lng, setLng] = useState(shippingInfo.longitude || 72.5714);
-  const [saveInfo, setSaveInfo] = useState(false);
+
 console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
@@ -46,11 +46,8 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
        return;
     }
 
-    if (saveInfo) {
-       await dispatch(saveAddress({ address, phoneNo: phoneNumber, latitude: lat, longitude: lng }));
-       toast.success("Address saved to profile!");
-    }
-
+    await dispatch(saveAddress({ address, phoneNo: phoneNumber, latitude: lat, longitude: lng }));
+    
     dispatch(saveShippingInfo({ address, phoneNumber, latitude: lat, longitude: lng }));
     navigate('/order/confirm');
   };
@@ -185,16 +182,7 @@ console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
             </div>
           </div>
 
-          <div className="shipping-form-group">
-              <label className="checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    checked={saveInfo} 
-                    onChange={(e) => setSaveInfo(e.target.checked)} 
-                  />
-                  Save this address for future orders
-              </label>
-          </div>
+
 
           <button className="shipping-submit-btn">Continue</button>
         </form>
