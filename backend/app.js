@@ -2,7 +2,6 @@ import express from 'express';
 import product from './routes/productRoutes.js';
 import user from './routes/userRoutes.js';
 import order from './routes/orderRoutes.js';
-import payment from './routes/paymentRoutes.js';
 import delivery from './routes/deliveryRoute.js';
 import contact from './routes/contactRoutes.js';
 import errorHandleMiddleware  from './middleware/error.js';
@@ -31,7 +30,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1",product)
 app.use("/api/v1",user)
 app.use("/api/v1",order)
-app.use("/api/v1",payment)
 app.use("/api/v1",delivery)
 app.use("/api/v1",contact)
 
