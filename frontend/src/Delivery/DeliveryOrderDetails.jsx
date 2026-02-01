@@ -82,11 +82,12 @@ function DeliveryOrderDetails() {
 
     const allowedStatuses = ['Prepared', 'Shipped', 'Out for Delivery'];
     const canUpdateStatus = orderStatus !== 'Delivered' && !completionRequested;
-    const { isLoaded } = useLoadScript({
+    const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
         libraries: ["places"],
     });
 
+    if (loadError) return <div className="error-message">Error loading maps: {loadError.message}</div>;
     if (!isLoaded) return <Loader />;
 
     const canRequestCompletion = orderStatus !== 'Delivered' && !completionRequested && orderStatus === 'Out for Delivery';
@@ -137,13 +138,13 @@ function DeliveryOrderDetails() {
                                         <Marker position={{ lat: shippingInfo.latitude, lng: shippingInfo.longitude }} />
                                     </GoogleMap>
                                     <a
-                                        href={`https://www.google.com/maps/search/?api=1&query=${shippingInfo.latitude},${shippingInfo.longitude}`}
+                                        href={`https://www.google.com/maps/dir/?api=1&destination=${shippingInfo.latitude},${shippingInfo.longitude}`}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="btn-map-large"
                                         style={{ marginTop: '10px', display: 'block', textAlign: 'center' }}
                                     >
-                                        📍 Open Navigation
+                                        📍 Start Navigation
                                     </a>
                                 </div>
                             )}

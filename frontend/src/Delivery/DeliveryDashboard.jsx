@@ -143,12 +143,12 @@ function DeliveryDashboard() {
                                                 <div className="order-actions">
                                                     {order.shippingInfo?.latitude && order.shippingInfo?.longitude && (
                                                         <a
-                                                            href={`https://www.google.com/maps/search/?api=1&query=${order.shippingInfo.latitude},${order.shippingInfo.longitude}`}
+                                                            href={`https://www.google.com/maps/dir/?api=1&destination=${order.shippingInfo.latitude},${order.shippingInfo.longitude}`}
                                                             target="_blank"
                                                             rel="noreferrer"
                                                             className="btn-map"
                                                         >
-                                                            📍 View Map
+                                                            📍 Navigate
                                                         </a>
                                                     )}
                                                     <Link to={`/delivery/order/${order._id}`} className="btn-action">
