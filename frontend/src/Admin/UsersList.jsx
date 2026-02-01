@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Sidebar from './Sidebar';
 import '../AdminStyles/UsersList.css'
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle';
@@ -59,7 +60,10 @@ useEffect(()=>{
 {loading?(<Loader/>):(   <>
    <Navbar/>
    <PageTitle title="All Users"/>
-    <div className="usersList-container">
+    <div className="admin-dashboard">
+    <Sidebar />
+    <div className="admin-content">
+     <div className="usersList-container">
         <h1 className="usersList-title">All Users</h1>
         <div className="usersList-table-container">
             <table className="usersList-table">
@@ -123,6 +127,8 @@ useEffect(()=>{
                 </tbody>
             </table>
         </div>
+    </div>
+    </div>
     </div>
 
    <Footer/>

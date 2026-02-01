@@ -1,5 +1,7 @@
 .product-details-container{
-    padding:100px;
+    padding: 40px 20px;
+    margin-top: 60px;
+    min-height: 80vh;
 }
   .product-detail-container{
     max-width: 1200px;
@@ -10,10 +12,11 @@
   }
   .product-image-container {
     position: sticky;
-    top: 40px;
+    top: 90px;
     z-index: 10;
     margin-bottom: 20px;
-    width: 500px;
+    width: 45%; 
+    min-width: 300px;
   }
   
 
@@ -24,16 +27,23 @@
     border-radius: 8px;
     background: #fff;
   }
+
   .product-thumbnails{
     margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
+
   .thumbnail-image {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
     cursor: pointer;
-    margin-left:10px;
+    margin: 5px;
     transition: transform 0.3s, border 0.3s;
+    border-radius: 4px;
+    border: 1px solid #ddd;
   }
   
   .thumbnail-image:hover {
@@ -41,13 +51,14 @@
   }
   
   .thumbnail-image.selected {
-    box-shadow: 0 0 2px black;
+    box-shadow: 0 0 0 2px var(--bg-primary);
+    border-color: var(--bg-primary);
   }
   
   
   .product-info {
     padding: 20px;
-    width: 500px;
+    width: 50%;
   }
   .product-description,.product-price{
     text-align: left;
@@ -184,25 +195,50 @@
   
 
 
-  @media (max-width: 768px) {
-  
-    .product-detail-container{
-        display: flex;
+@media (max-width: 768px) {
+  .product-details-container {
+      padding: 20px;
+      margin-top: 60px;
+  }
+
+  .product-detail-container {
       flex-direction: column;
-      }
-  
-    .product-image-container {
+      align-items: center;
+  }
+
+  .product-image-container {
       position: static;
-    }
+      width: 100%;
+      margin-bottom: 30px;
   }
-  @media (max-width: 568px) {
-    .product-details-container{
-       width:80%;
-       scroll-behavior:unset;
-       margin:0 auto
-      }  
- 
+
+  .product-info {
+      width: 100%;
+      padding: 10px;
   }
+
+  .product-detail-image {
+      max-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-details-container {
+      padding: 10px;
+  }
+
+  .product-info h2 {
+      font-size: 20px;
+  }
+
+  .quantity-controls {
+      flex-wrap: wrap;
+  }
+
+  .add-to-cart-btn {
+      width: 100%;
+  }
+}
   
   
   

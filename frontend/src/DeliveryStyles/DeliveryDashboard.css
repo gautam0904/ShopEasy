@@ -483,6 +483,11 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .delivery-dashboard, .delivery-order-container {
+        padding: 10px;
+        margin-top: 60px;
+    }
+
     .stats-container {
         flex-direction: column;
     }
@@ -492,8 +497,9 @@
     }
     
     .tab-btn {
-        flex: 1;
+        flex: 1 1 45%; 
         text-align: center;
+        margin-bottom: 5px;
     }
     
     .order-details-grid {
@@ -507,8 +513,23 @@
     .status-select {
         width: 100%;
     }
+
+    .btn-update, .btn-complete, .btn-back, .btn-map-large {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
     
     .add-note-form {
         flex-direction: column;
+    }
+
+    .btn-add-note {
+        width: 100%;
+    }
+
+    /* Ensure tables scroll */
+    .table-container, .detail-card {
+        overflow-x: auto;
     }
 }
