@@ -63,7 +63,7 @@ function Dashboard() {
             <div className="stat-box">
                 <AttachMoney className='icon'/>
                 <h3>Total Revenue</h3>
-                <p>{totalAmount}/-</p>
+                <p>{totalAmount && totalAmount.toFixed(3)}/-</p>
             </div>
 
             <div className="stat-box">

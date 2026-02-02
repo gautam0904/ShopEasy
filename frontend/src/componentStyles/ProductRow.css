@@ -1,0 +1,96 @@
+.product-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: white;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+  }
+  
+  .product-row:hover {
+    background: #f9f9f9;
+  }
+  
+  .product-row-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .product-row-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 4px;
+    opacity: 0.7;
+  }
+  
+  .product-row-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .product-row-tags {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .row-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .row-tag.offer {
+    background-color: #55c6d9; /* Teal like Namecheap */
+  }
+  
+  .product-row-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .product-row-pricing {
+    text-align: right;
+  }
+  
+  .row-price-current {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    display: block;
+  }
+  
+  .row-price-retail {
+    font-size: 12px;
+    color: #999;
+    text-decoration: line-through;
+  }
+  
+  .row-add-cart-btn {
+    background-color: #555; /* Dark gray like 'Add to cart' in list */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s;
+  }
+  
+  .row-add-cart-btn:hover {
+    background-color: #333;
+  }
+  
+  .row-add-cart-btn svg {
+    font-size: 18px;
+  }
