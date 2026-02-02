@@ -175,3 +175,215 @@
     margin-bottom: 8px;
     margin-top: -4px;
 }
+
+/* Saved Addresses Styles */
+.saved-addresses-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.saved-addresses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.saved-addresses-header h3 {
+    margin: 0;
+    color: var(--primary-dark);
+}
+
+.add-new-address-btn {
+    background: transparent;
+    border: 1px solid var(--primary-main);
+    color: var(--primary-main);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.add-new-address-btn:hover {
+    background: var(--primary-main);
+    color: white;
+}
+
+.saved-addresses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.saved-address-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.saved-address-card:hover {
+    border-color: var(--primary-main);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.saved-address-card.selected {
+    border-color: var(--primary-main);
+    background: rgba(var(--primary-main-rgb), 0.05); /* Assuming rgb var exists, or just use hex alpha */
+    background: #f0f4ff; /* Fallback light color */
+    box-shadow: 0 0 0 2px var(--primary-main);
+}
+
+.saved-addr-text {
+    font-weight: 500;
+    margin-bottom: 5px;
+    line-height: 1.4;
+    padding-right: 25px; /* Space for delete button */
+}
+
+.saved-addr-phone {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.delete-addr-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color 0.2s;
+}
+
+.delete-addr-btn:hover {
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+/* Selected Address Summary & Payment Option */
+.selected-address-summary {
+    grid-column: 1 / -1;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.summary-row {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.summary-row h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.location-pin-text {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #2e7d32;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.payment-option-section h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.payment-option-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    background: white;
+}
+
+.payment-option-card.selected {
+    border-color: #2e7d32;
+    background: #f1f8e9;
+}
+
+.payment-option-card input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #2e7d32;
+}
+
+.payment-option-card span {
+    font-weight: 500;
+    color: #333;
+}
+
+/* Last Address Suggestion Banner */
+.last-address-suggestion {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.suggestion-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.suggestion-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #1976d2;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.suggestion-text {
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+}
+
+.use-last-addr-btn {
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+    margin-left: 20px;
+}
+
+.use-last-addr-btn:hover {
+    background: #1565c0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

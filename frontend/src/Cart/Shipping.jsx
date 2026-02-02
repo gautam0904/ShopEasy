@@ -25,6 +25,8 @@ function Shipping() {
   const [phoneNumber, setPhoneNumber] = useState(shippingInfo.phoneNumber || "");
   const [lat, setLat] = useState(shippingInfo.latitude || 23.0225); 
   const [lng, setLng] = useState(shippingInfo.longitude || 72.5714);
+  const [isFormVisible, setIsFormVisible] = useState(true);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
@@ -56,8 +58,31 @@ function Shipping() {
       setPhoneNumber(addr.phoneNo);
       setLat(addr.latitude);
       setLng(addr.longitude);
+      setIsFormVisible(false);
+      setSelectedAddressId(addr._id);
       toast.info("Address Selected");
   }
+
+  const useLastAddress = () => {
+    if (shippingInfo && shippingInfo.address) {
+        setAddress(shippingInfo.address);
+        setPhoneNumber(shippingInfo.phoneNumber);
+        setLat(shippingInfo.latitude || 23.0225);
+        setLng(shippingInfo.longitude || 72.5714);
+        setIsFormVisible(false);
+        setSelectedAddressId('last_used'); 
+        toast.info("Using last used address");
+    }
+  };
+
+  const handleAddNewAddress = () => {
+    setAddress("");
+    setPhoneNumber("");
+    setLat(23.0225); 
+    setLng(72.5714);
+    setIsFormVisible(true);
+    setSelectedAddressId(null);
+  };
 
   const handleDeleteAddress = (id) => {
       if(window.confirm("Are you sure you want to delete this address?")) {
@@ -118,13 +143,38 @@ function Shipping() {
       <CheckoutPath activePath={0} />
       <div className="shipping-form-container">
         <h1 className="shipping-form-header">Shipping Details</h1>
+     
+        {shippingInfo && shippingInfo.address && isFormVisible && (
+            <div className="last-address-suggestion">
+                <div className="suggestion-content">
+                    <span className="suggestion-label">Last Used Address:</span>
+                    <span className="suggestion-text">{shippingInfo.address.substring(0, 50)}...</span>
+                </div>
+                <button type="button" className="use-last-addr-btn" onClick={useLastAddress}>
+                    Use This Address
+                </button>
+            </div>
+        )}
         
         {user && user.addresses && user.addresses.length > 0 && (
             <div className="saved-addresses-section">
-                <h3>Saved Addresses</h3>
+                <div className="saved-addresses-header">
+                    <h3>Saved Addresses</h3>
+                    <button 
+                        type="button" 
+                        className="add-new-address-btn"
+                        onClick={handleAddNewAddress}
+                    >
+                        + Add New Address
+                    </button>
+                </div>
                 <div className="saved-addresses-list">
                     {user.addresses.map((addr) => (
-                        <div key={addr._id} className="saved-address-card" onClick={() => selectAddress(addr)}>
+                        <div 
+                            key={addr._id} 
+                            className={`saved-address-card ${selectedAddressId === addr._id ? 'selected' : ''}`} 
+                            onClick={() => selectAddress(addr)}
+                        >
                             <p className="saved-addr-text">{addr.address}</p>
                             <p className="saved-addr-phone">Phone: {addr.phoneNo}</p>
                             <button className="delete-addr-btn" onClick={(e) => { e.stopPropagation(); handleDeleteAddress(addr._id); }}>
@@ -138,59 +188,81 @@ function Shipping() {
 
         <form className="shipping-form" onSubmit={shippingInfoSubmit}>
             
-            <div className="shipping-form-group full-width">
-              <label htmlFor="address">Address</label>
-              <textarea
-                id="address"
-                name="address"
-                placeholder="123 Main Street, Apartment 4B, Near City Mall..."
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-                className="address-input"
-                rows="4"
-              />
-            </div>
+            {isFormVisible ? (
+                <>
+                    <div className="shipping-form-group full-width">
+                      <label htmlFor="address">Address</label>
+                      <textarea
+                        id="address"
+                        name="address"
+                        placeholder="123 Main Street, Apartment 4B, Near City Mall..."
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        required={isFormVisible}
+                        className="address-input"
+                        rows="4"
+                      />
+                    </div>
 
-            <div className="shipping-form-group full-width">
-              <label htmlFor="phoneNumber">Mobile Number</label>
-              <input
-                type="text"
-                inputMode="numeric"
-                id="phoneNumber"
-                name="phoneNumber"
-                placeholder="Enter 10-digit mobile number"
-                value={phoneNumber}
-                onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*$/.test(val) && val.length <= 10) {
-                        setPhoneNumber(val);
-                    }
-                }}
-                required
-              />
-            </div>
+                    <div className="shipping-form-group full-width">
+                      <label htmlFor="phoneNumber">Mobile Number</label>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        placeholder="Enter 10-digit mobile number"
+                        value={phoneNumber}
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (/^\d*$/.test(val) && val.length <= 10) {
+                                setPhoneNumber(val);
+                            }
+                        }}
+                        required={isFormVisible}
+                      />
+                    </div>
 
-          <div className="shipping-form-group full-width">
-            <label>Location (Pin on Map)</label>
-            <div className="map-controls">
-                <button type="button" onClick={handleCurrentLocation} className="shipping-btn-small">
-                <MyLocation /> Use Current Location
-                </button>
-                <div className="lat-lng-display">Selected: {lat.toFixed(6)}, {lng.toFixed(6)}</div>
-            </div>
-            
-            <div className="map-container">
-                <GoogleMap
-                    zoom={15}
-                    center={{ lat, lng }}
-                    mapContainerStyle={{ width: '100%', height: '350px', borderRadius: '8px' }}
-                    onClick={onMapClick}
-                >
-                    <Marker position={{ lat, lng }} />
-                </GoogleMap>
-            </div>
-          </div>
+                  <div className="shipping-form-group full-width">
+                    <label>Location (Pin on Map)</label>
+                    <div className="map-controls">
+                        <button type="button" onClick={handleCurrentLocation} className="shipping-btn-small">
+                        <MyLocation /> Use Current Location
+                        </button>
+                        <div className="lat-lng-display">Selected: {lat.toFixed(3)}, {lng.toFixed(3)}</div>
+                    </div>
+                    
+                    <div className="map-container">
+                        <GoogleMap
+                            zoom={15}
+                            center={{ lat, lng }}
+                            mapContainerStyle={{ width: '100%', height: '350px', borderRadius: '8px' }}
+                            onClick={onMapClick}
+                        >
+                            <Marker position={{ lat, lng }} />
+                        </GoogleMap>
+                    </div>
+                  </div>
+                </>
+            ) : (
+                <div className="selected-address-summary">
+                    <div className="summary-row">
+                        <h4>Delivering to:</h4>
+                        <p>{address}</p>
+                        <p><strong>Phone:</strong> {phoneNumber}</p>
+                        <p className="location-pin-text">
+                           <MyLocation fontSize="small" style={{verticalAlign: 'bottom'}}/> Location pinned
+                        </p>
+                    </div>
+                    <div className="payment-option-section">
+                        <h4>Payment Option</h4>
+                        <div className="payment-option-card selected">
+                            <input type="radio" checked readOnly />
+                            <span>Cash on Delivery (COD)</span>
+                        </div>
+                    </div>
+                </div>
+            )}
 
 
 
