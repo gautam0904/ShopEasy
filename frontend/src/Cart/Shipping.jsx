@@ -11,7 +11,7 @@ import { saveAddress, deleteAddress } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Delete } from '@mui/icons-material';
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import { MyLocation } from '@mui/icons-material'
+import { MyLocation, Close } from '@mui/icons-material'
 
 const libraries = ["places"];
 
@@ -27,6 +27,7 @@ function Shipping() {
   const [lng, setLng] = useState(shippingInfo.longitude || 72.5714);
   const [isFormVisible, setIsFormVisible] = useState(true);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
@@ -60,6 +61,7 @@ function Shipping() {
       setLng(addr.longitude);
       setIsFormVisible(false);
       setSelectedAddressId(addr._id);
+      setIsAddressModalOpen(false); // Close modal on selection
       toast.info("Address Selected");
   }
 
@@ -82,6 +84,7 @@ function Shipping() {
     setLng(72.5714);
     setIsFormVisible(true);
     setSelectedAddressId(null);
+    setIsAddressModalOpen(false); // Close modal if open
   };
 
   const handleDeleteAddress = (id) => {
@@ -157,18 +160,28 @@ function Shipping() {
         )}
         
         {user && user.addresses && user.addresses.length > 0 && (
-            <div className="saved-addresses-section">
-                <div className="saved-addresses-header">
-                    <h3>Saved Addresses</h3>
-                    <button 
-                        type="button" 
-                        className="add-new-address-btn"
-                        onClick={handleAddNewAddress}
-                    >
-                        + Add New Address
-                    </button>
-                </div>
-                <div className="saved-addresses-list">
+            <div className="saved-addresses-actions">
+                 <button 
+                    type="button" 
+                    className="view-saved-addr-btn"
+                    onClick={() => setIsAddressModalOpen(true)}
+                >
+                    Choose from Saved Addresses ({user.addresses.length})
+                </button>
+            </div>
+        )}
+
+        {/* Address Selection Modal */}
+        {isAddressModalOpen && (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h3>Select Address</h3>
+                        <button className="close-modal-btn" onClick={() => setIsAddressModalOpen(false)}>
+                            <Close />
+                        </button>
+                    </div>
+                    <div className="saved-addresses-list">
                     {user.addresses.map((addr) => (
                         <div 
                             key={addr._id} 
@@ -182,6 +195,7 @@ function Shipping() {
                             </button>
                         </div>
                     ))}
+                    </div>
                 </div>
             </div>
         )}
@@ -247,7 +261,10 @@ function Shipping() {
             ) : (
                 <div className="selected-address-summary">
                     <div className="summary-row">
-                        <h4>Delivering to:</h4>
+                        <div className="summary-header">
+                            <h4>Delivering to:</h4>
+                            <button type="button" className="change-address-btn" onClick={() => setIsFormVisible(true)}>Change</button>
+                        </div>
                         <p>{address}</p>
                         <p><strong>Phone:</strong> {phoneNumber}</p>
                         <p className="location-pin-text">
