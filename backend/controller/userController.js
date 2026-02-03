@@ -276,18 +276,6 @@ export const saveAddress = handleAsyncError(async (req, res, next) => {
     }
 
     const user = await User.findById(req.user.id);
-
-    const isDuplicate = user.addresses.some(addr => addr.address === address);
-
-    if (isDuplicate) {
-        return res.status(200).json({
-            success: true,
-            message: "Address already exists",
-            user
-        });
-    }
-    
-    // Check for duplicate address
     const isDuplicate = user.addresses.some(addr => addr.address === address);
 
     if (isDuplicate) {
